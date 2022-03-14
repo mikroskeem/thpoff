@@ -13,7 +13,13 @@
         "x86_64-linux"
       ];
     in
-    flake-utils.lib.eachSystem supportedSystems (system:
+    {
+      nixosModules = {
+        thpoff = import ./nix/module.nix;
+      };
+      nixosModule = self.nixosModules.thpoff;
+    }
+    // (flake-utils.lib.eachSystem supportedSystems (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
       in
@@ -23,5 +29,5 @@
         };
 
         defaultPackage = packages.thpoff;
-      });
+      }));
 }
